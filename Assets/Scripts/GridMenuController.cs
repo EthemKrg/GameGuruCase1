@@ -58,6 +58,7 @@ public class GridMenuController : MonoBehaviour
     // Function to handle the signal when the grid is rebuilt
     private void OnGridRebuilded(GridRebuildedSignal signal)
     {
-        infoText.text = $"Grid Builded : {signal.GridSize}x{signal.GridSize}";
+        int size = (int)signal.GridSize.x;
+        infoText.text = $"Grid Builded : {size}x{size}";
     }
 }
