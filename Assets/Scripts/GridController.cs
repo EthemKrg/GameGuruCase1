@@ -28,17 +28,18 @@ public class GridController : MonoBehaviour
         List<GridCell> matchedCells = CheckAllDirectionsForMatch(gridMarkedSignal.GridCell);
 
         // If there are matched cells, log them
-        if (matchedCells.Count > 0)
+        if (matchedCells.Count >= 3)
         {
-            Debug.Log($"Matched {matchedCells.Count} cells:");
+            //Debug.Log($"Matched {matchedCells.Count} cells:");
             foreach (var cell in matchedCells)
             {
-                Debug.Log($"Matched cell: {cell.name}");
+                //Debug.Log($"Matched cell: {cell.name}");
+                cell.CellMatched(); // Call the CellMatched method on each matched cell
             }
         }
         else
         {
-            Debug.Log("No matches found.");
+            //Debug.Log("No matches found.");
         }
     }
 
