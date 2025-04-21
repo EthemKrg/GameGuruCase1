@@ -12,8 +12,8 @@ public class GridCell : MonoBehaviour
     private bool hasMarker = false;
     public bool HasMarker => hasMarker;
 
-    private float scaleUpDuration = 0.6f;
-    private float scaleDownDuration = 0.5f;
+    private float scaleUpDuration = 0.4f;
+    private float scaleDownDuration = 0.25f;
 
     private void OnEnable()
     {
