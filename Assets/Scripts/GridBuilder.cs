@@ -1,4 +1,5 @@
 using Injection;
+using System.Collections.Generic;
 using UnityEngine;
 using Zenject;
 
@@ -7,7 +8,7 @@ public class GridBuilder : MonoBehaviour
     [Inject] private SignalBus signalBus;
 
     // Reference to the prefab used for each cell in the grid
-    [SerializeField] private GameObject cellPrefab;
+    [SerializeField] private GridCell cellPrefab;
 
     // The starting position of the grid
     [SerializeField] private Vector3 gridStartPosition = Vector3.zero;
@@ -20,6 +21,15 @@ public class GridBuilder : MonoBehaviour
     // The size of the grid for debugging purposes
     [SerializeField] private int gridDebugSizeX = 9;
     [SerializeField] private int gridDebugSizeY = 9;
+
+    // Private variables
+    private List<GridCell> gridCells = new List<GridCell>();
+    public List<GridCell> GridCells => gridCells;
+
+    private void Start()
+    {
+        CreateGridDebug();
+    }
 
     /// <summary>
     /// Creates a grid of cells based on the given size.
@@ -43,7 +53,11 @@ public class GridBuilder : MonoBehaviour
                 Vector3 cellPosition = gridStartPosition + new Vector3(col * cellSpacing, row * cellSpacing, 0);
 
                 // Instantiate the cellPrefab at the calculated position
-                GameObject cell = Instantiate(cellPrefab, cellPosition, Quaternion.identity, transform);
+                GridCell cell = Instantiate(cellPrefab, cellPosition, Quaternion.identity, transform);
+
+                cell.Initialize(new Vector2(col, row)); // Initialize the cell with its position
+                
+                gridCells.Add(cell);
 
                 // Optionally, name the cell for easier debugging
                 cell.name = $"Cell ({row}, {col})";
