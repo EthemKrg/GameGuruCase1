@@ -34,7 +34,7 @@ public class InputController : MonoBehaviour
                 GridCell gridCell = hitObject.GetComponent<GridCell>();
                 if (gridCell != null)
                 {
-                    Debug.Log($"Cell position: {gridCell.Position}");
+                    gridCell.CellClicked();
                 }
             }
         }
