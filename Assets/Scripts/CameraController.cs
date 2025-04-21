@@ -7,9 +7,24 @@ public class CameraController : MonoBehaviour
 {
     [Inject] private SignalBus signalBus;
 
-    // Multiplier to calculate the camera's distance based on the grid size
-    [SerializeField] private float cameraDistanceMultiplier = 1.5f;
+    // Multiplier to calculate the camera's orthographic size based on the grid size
+    [SerializeField] private float sizePadding = 1.5f; // Extra padding to ensure the grid fits in view
     [SerializeField] private float cameraYOffset = 0.5f;
+
+    private Camera _camera;
+
+    private void Awake()
+    {
+        // Cache the Camera component
+        _camera = GetComponent<Camera>();
+
+        // Ensure the camera is in orthographic mode
+        if (!_camera.orthographic)
+        {
+            Debug.LogWarning("Camera is not in orthographic mode. Switching to orthographic.");
+            _camera.orthographic = true;
+        }
+    }
 
     private void OnEnable()
     {
@@ -22,7 +37,7 @@ public class CameraController : MonoBehaviour
     }
 
     /// <summary>
-    /// Updates the camera's position after the grid is rebuilt.
+    /// Updates the camera's position and orthographic size after the grid is rebuilt.
     /// </summary>
     /// <param name="gridRebuildedSignal">Signal containing grid details such as size, spacing, and start position.</param>
     private void UpdateCameraAfterRebuild(GridRebuildedSignal gridRebuildedSignal)
@@ -39,17 +54,21 @@ public class CameraController : MonoBehaviour
         Vector3 gridCenter = gridStartPosition + new Vector3((gridSizeX - 1) * cellSpacing / 2,
             (gridSizeY - 1) * cellSpacing / 2, 0);
 
-        // Initialize the camera's position at the grid center
+        // Set the camera's position
         Vector3 camPos = gridCenter;
-
-        // Calculate the camera's distance based on the grid size and multiplier
-        float cameraDistance = Mathf.Max(gridSizeX, gridSizeY) * cellSpacing * cameraDistanceMultiplier;
-
-        // Adjust the camera's position to move it back along the z-axis
-        camPos.z -= cameraDistance;
-        camPos.y += cameraYOffset;
-
-        // Set the camera's new position
+        camPos.z = transform.position.z; // Keep the camera's z position
+        camPos.y += cameraYOffset; // Apply vertical offset
         transform.DOMove(camPos, 0.5f).SetEase(Ease.OutBack);
+
+        // Calculate the orthographic size
+        float gridHeight = gridSizeY * cellSpacing;
+        float gridWidth = gridSizeX * cellSpacing;
+
+        // Orthographic size is based on the height, but we also need to account for the aspect ratio
+        float aspectRatio = _camera.aspect;
+        float orthographicSize = Mathf.Max(gridHeight / 2, (gridWidth / 2) / aspectRatio) * sizePadding;
+
+        // Set the camera's orthographic size
+        _camera.DOOrthoSize(orthographicSize, 0.5f).SetEase(Ease.OutBack);
     }
 }
