@@ -16,6 +16,10 @@ public class GridBuilder : MonoBehaviour
     // The spacing between cells in the grid
     [SerializeField] private float cellSpacing = 1.1f;
 
+    // Builded Grid size
+    private Vector2 gridSize;
+    public Vector2 GridSize => gridSize;
+
     [Space(20)]
     [Header("DEBUGGING \nUse ContextMenu for Rebuild.")]
     // The size of the grid for debugging purposes
@@ -44,6 +48,8 @@ public class GridBuilder : MonoBehaviour
             DestroyImmediate(transform.GetChild(0).gameObject);
         }
 
+        int index = 0; // Initialize index for cell naming
+
         // Loop through rows (y-axis) and columns (x-axis) to instantiate cells
         for (int row = 0; row < gridSizeY; row++)
         {
@@ -55,12 +61,15 @@ public class GridBuilder : MonoBehaviour
                 // Instantiate the cellPrefab at the calculated position
                 GridCell cell = Instantiate(cellPrefab, cellPosition, Quaternion.identity, transform);
 
-                cell.Initialize(new Vector2(col, row)); // Initialize the cell with its position
+                cell.Initialize(index, new Vector2(col, row), signalBus); // Initialize the cell with its position
                 
                 gridCells.Add(cell);
 
                 // Optionally, name the cell for easier debugging
                 cell.name = $"Cell ({row}, {col})";
+
+                // Increment the index for the next cell
+                index++;
             }
         }
 
@@ -73,6 +82,9 @@ public class GridBuilder : MonoBehaviour
                 gridStartPosition
             ));
         }
+
+        // Set the grid size
+        gridSize = new Vector2(gridSizeX, gridSizeY);
     }
 
     // Debug function to create the grid from the inspector
