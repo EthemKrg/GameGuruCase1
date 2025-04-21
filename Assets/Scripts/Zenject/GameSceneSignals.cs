@@ -16,4 +16,14 @@ namespace Injection
         }
     }
 
+    public class GridMarkedSignal
+    {
+        public GridCell GridCell { get; }
+        public GridMarkedSignal(GridCell gridCell)
+        {
+            GridCell = gridCell;
+        }
+    }
 }
+
+

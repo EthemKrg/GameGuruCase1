@@ -14,6 +14,7 @@ namespace Injection
             //Signals
             SignalBusInstaller.Install(Container);
             Container.DeclareSignal<GridRebuildedSignal>();
+            Container.DeclareSignal<GridMarkedSignal>();
 
             //Bindings
             Container.Bind<GridMenuController>().FromInstance(gridMenuController).AsSingle();
