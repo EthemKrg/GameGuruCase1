@@ -48,6 +48,9 @@ public class GridBuilder : MonoBehaviour
             DestroyImmediate(transform.GetChild(0).gameObject);
         }
 
+        // Clear the list of grid cells
+        gridCells.Clear();
+
         int index = 0; // Initialize index for cell naming
 
         // Loop through rows (y-axis) and columns (x-axis) to instantiate cells
