@@ -9,6 +9,7 @@ public class CameraController : MonoBehaviour
 
     // Multiplier to calculate the camera's distance based on the grid size
     [SerializeField] private float cameraDistanceMultiplier = 1.5f;
+    [SerializeField] private float cameraYOffset = 0.5f;
 
     private void OnEnable()
     {
@@ -35,8 +36,8 @@ public class CameraController : MonoBehaviour
         Vector3 gridStartPosition = gridRebuildedSignal.GridStartPos;
 
         // Calculate the center of the grid
-        Vector3 gridCenter = gridStartPosition + new Vector3((gridSizeX - 1) * cellSpacing / 2, 0,
-            (gridSizeY - 1) * cellSpacing / 2);
+        Vector3 gridCenter = gridStartPosition + new Vector3((gridSizeX - 1) * cellSpacing / 2,
+            (gridSizeY - 1) * cellSpacing / 2, 0);
 
         // Initialize the camera's position at the grid center
         Vector3 camPos = gridCenter;
@@ -46,6 +47,7 @@ public class CameraController : MonoBehaviour
 
         // Adjust the camera's position to move it back along the z-axis
         camPos.z -= cameraDistance;
+        camPos.y += cameraYOffset;
 
         // Set the camera's new position
         transform.DOMove(camPos, 0.5f).SetEase(Ease.OutBack);

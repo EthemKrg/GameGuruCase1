@@ -6,7 +6,8 @@ using Injection;
 
 public class GridMenuController : MonoBehaviour
 {
-    [Inject] SignalBus signalBus;
+    [Inject] private SignalBus signalBus;
+    [Inject] private GridBuilder gridBuilder;
 
     [SerializeField] private TMP_InputField inputField;
     [SerializeField] private Button submitButton;
@@ -48,6 +49,7 @@ public class GridMenuController : MonoBehaviour
     // Function to process the integer value retrieved from the InputField
     private void ProcessInputValue(int value)
     {
+        gridBuilder.CreateGrid(value, value);
 
         // Perform any necessary operations with the received value
         Debug.Log($"Received value: {value}");

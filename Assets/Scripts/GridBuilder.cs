@@ -15,6 +15,8 @@ public class GridBuilder : MonoBehaviour
     // The spacing between cells in the grid
     [SerializeField] private float cellSpacing = 1.1f;
 
+    [Space(20)]
+    [Header("DEBUGGING \nUse ContextMenu for Rebuild.")]
     // The size of the grid for debugging purposes
     [SerializeField] private int gridDebugSizeX = 9;
     [SerializeField] private int gridDebugSizeY = 9;
