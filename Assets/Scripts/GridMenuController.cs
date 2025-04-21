@@ -1,15 +1,32 @@
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
+using Zenject;
+using Injection;
 
 public class GridMenuController : MonoBehaviour
 {
-    [SerializeField] private InputField inputField;
+    [Inject] SignalBus signalBus;
+
+    [SerializeField] private TMP_InputField inputField;
     [SerializeField] private Button submitButton;
+    [SerializeField] private TextMeshProUGUI infoText;
+
+    private void OnEnable()
+    {
+        signalBus.Subscribe<GridRebuildedSignal>(OnGridRebuilded);
+    }
+
+    private void OnDisable()
+    {
+        signalBus.Unsubscribe<GridRebuildedSignal>(OnGridRebuilded);
+    }
 
     void Start()
     {
         // Add a listener to the button to call OnSubmitButtonClicked when clicked
         submitButton.onClick.AddListener(OnSubmitButtonClicked);
+
     }
 
     // Function triggered when the button is clicked
@@ -31,7 +48,14 @@ public class GridMenuController : MonoBehaviour
     // Function to process the integer value retrieved from the InputField
     private void ProcessInputValue(int value)
     {
+
         // Perform any necessary operations with the received value
         Debug.Log($"Received value: {value}");
+    }
+
+    // Function to handle the signal when the grid is rebuilt
+    private void OnGridRebuilded(GridRebuildedSignal signal)
+    {
+        infoText.text = $"Grid Builded : {signal.GridSize}x{signal.GridSize}";
     }
 }
